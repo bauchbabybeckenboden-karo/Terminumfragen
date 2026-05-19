@@ -26,6 +26,7 @@ export default function UmfrageTeilnehmen() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [ausgewählt, setAusgewählt] = useState([])
+  const [keinTermin, setKeinTermin] = useState(false)
   const [anmerkung, setAnmerkung] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -51,9 +52,17 @@ export default function UmfrageTeilnehmen() {
   }, [id])
 
   const toggleTermin = (i) => {
+    if (keinTermin) return
     setAusgewählt(prev =>
       prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i]
     )
+  }
+
+  const toggleKeinTermin = () => {
+    setKeinTermin(prev => {
+      if (!prev) setAusgewählt([])
+      return !prev
+    })
   }
 
   const shareLink = `${window.location.origin}/umfrage/${id}`
@@ -67,14 +76,13 @@ export default function UmfrageTeilnehmen() {
   const handleSubmit = async () => {
     if (!name.trim()) { setError('Bitte gib deinen Namen ein.'); return }
     if (!email.trim()) { setError('Bitte gib deine E-Mail-Adresse ein.'); return }
-    if (ausgewählt.length === 0) { setError('Bitte wähle mindestens einen Termin aus.'); return }
+    if (!keinTermin && ausgewählt.length === 0) { setError('Bitte wähle mindestens einen Termin aus.'); return }
 
     setSubmitting(true)
     setError('')
 
-    const gewählteTermine = ausgewählt.map(i => umfrage.termine[i])
+    const gewählteTermine = keinTermin ? [] : ausgewählt.map(i => umfrage.termine[i])
 
-    // Antwort in Supabase speichern
     const { error: dbError } = await supabase
       .from('antworten')
       .insert([{
@@ -82,7 +90,7 @@ export default function UmfrageTeilnehmen() {
         name,
         email,
         termine: gewählteTermine,
-        anmerkung
+        anmerkung: keinTermin ? 'Kein Termin passend' : anmerkung
       }])
 
     if (dbError) {
@@ -91,26 +99,25 @@ export default function UmfrageTeilnehmen() {
       return
     }
 
-    // EmailJS — Bestätigung an Teilnehmerin
-    const termineText = gewählteTermine
-      .map(t => `• ${formatDatum(t.datum)} um ${t.uhrzeit} Uhr${t.anmerkung ? ` (${t.anmerkung})` : ''}`)
-      .join('\n')
+    if (!keinTermin) {
+      const termineText = gewählteTermine
+        .map(t => `• ${formatDatum(t.datum)} um ${t.uhrzeit} Uhr${t.anmerkung ? ` (${t.anmerkung})` : ''}`)
+        .join('\n')
 
-    try {
-      await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-        to_name: name,
-        to_email: email,
-        umfrage_titel: umfrage.titel,
-        umfrage_ort: umfrage.ort || '',
-        termine_liste: termineText,
-        anmerkung: anmerkung || '–',
-      }, PUBLIC_KEY)
-    } catch (e) {
-      console.warn('EmailJS Fehler:', e)
-      // Nicht blockierend — Antwort ist trotzdem gespeichert
+      try {
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+          to_name: name,
+          to_email: email,
+          umfrage_titel: umfrage.titel,
+          umfrage_ort: umfrage.ort || '',
+          termine_liste: termineText,
+          anmerkung: anmerkung || '–',
+        }, PUBLIC_KEY)
+      } catch (e) {
+        console.warn('EmailJS Fehler:', e)
+      }
     }
 
-    // Benachrichtigung an Karo via Netlify Function
     try {
       await fetch('/.netlify/functions/notify', {
         method: 'POST',
@@ -120,7 +127,8 @@ export default function UmfrageTeilnehmen() {
           email,
           umfrage_titel: umfrage.titel,
           termine: gewählteTermine,
-          anmerkung
+          anmerkung: keinTermin ? 'Kein Termin passend' : anmerkung,
+          kein_termin: keinTermin
         })
       })
     } catch (e) {
@@ -174,7 +182,11 @@ export default function UmfrageTeilnehmen() {
       <div className={styles.successCard}>
         <div className={styles.successIcon}>♡</div>
         <h2>Vielen Dank!</h2>
-        <p>Deine Antwort wurde gespeichert. Du erhältst gleich eine Bestätigung per E-Mail.</p>
+        <p>
+          {keinTermin
+            ? 'Schade, dass es diesmal nicht klappt — ich hoffe, wir sehen uns beim nächsten Kurs!'
+            : 'Deine Antwort wurde gespeichert. Du erhältst gleich eine Bestätigung per E-Mail.'}
+        </p>
       </div>
     </div>
   )
@@ -186,6 +198,7 @@ export default function UmfrageTeilnehmen() {
         name={name} setName={setName}
         email={email} setEmail={setEmail}
         ausgewählt={ausgewählt} toggleTermin={toggleTermin}
+        keinTermin={keinTermin} toggleKeinTermin={toggleKeinTermin}
         anmerkung={anmerkung} setAnmerkung={setAnmerkung}
         error={error}
         submitting={submitting}
@@ -199,6 +212,7 @@ function UmfrageFormular({
   umfrage, preview = false,
   name, setName, email, setEmail,
   ausgewählt = [], toggleTermin,
+  keinTermin, toggleKeinTermin,
   anmerkung, setAnmerkung,
   error, submitting, onSubmit
 }) {
@@ -222,13 +236,13 @@ function UmfrageFormular({
           <h2>Terminvorschläge</h2>
         </div>
         <p className={styles.hinweis}>Wähle alle Termine aus, an denen du teilnehmen kannst.</p>
-        <div className={styles.termine}>
+        <div className={`${styles.termine} ${keinTermin ? styles.termineDisabled : ''}`}>
           {umfrage.termine.map((t, i) => (
             <button
               key={i}
-              className={`${styles.terminCard} ${ausgewählt.includes(i) ? styles.selected : ''}`}
+              className={`${styles.terminCard} ${ausgewählt.includes(i) ? styles.selected : ''} ${keinTermin ? styles.disabled : ''}`}
               onClick={() => !preview && toggleTermin(i)}
-              disabled={preview}
+              disabled={preview || keinTermin}
             >
               <div className={styles.terminDatum}>{formatDatum(t.datum)}</div>
               <div className={styles.terminUhrzeit}>{t.uhrzeit} Uhr</div>
@@ -237,6 +251,18 @@ function UmfrageFormular({
             </button>
           ))}
         </div>
+
+        {!preview && (
+          <label className={styles.keinTerminLabel}>
+            <input
+              type="checkbox"
+              checked={keinTermin || false}
+              onChange={toggleKeinTermin}
+              className={styles.keinTerminCheckbox}
+            />
+            Ich kann leider bei keinem der Termine dabei sein.
+          </label>
+        )}
       </div>
 
       {!preview && (
@@ -254,10 +280,12 @@ function UmfrageFormular({
               <label>E-MAIL</label>
               <input type="email" placeholder="deine@email.de" value={email} onChange={e => setEmail(e.target.value)} />
             </div>
-            <div className={styles.field}>
-              <label>ANMERKUNG (OPTIONAL)</label>
-              <textarea placeholder="Hast du noch etwas mitzuteilen?" value={anmerkung} onChange={e => setAnmerkung(e.target.value)} rows={2} />
-            </div>
+            {!keinTermin && (
+              <div className={styles.field}>
+                <label>ANMERKUNG (OPTIONAL)</label>
+                <textarea placeholder="Hast du noch etwas mitzuteilen?" value={anmerkung} onChange={e => setAnmerkung(e.target.value)} rows={2} />
+              </div>
+            )}
           </div>
 
           {error && <p className={styles.error}>{error}</p>}
@@ -270,3 +298,4 @@ function UmfrageFormular({
     </div>
   )
 }
+/* append to UmfrageTeilnehmen.module.css */
