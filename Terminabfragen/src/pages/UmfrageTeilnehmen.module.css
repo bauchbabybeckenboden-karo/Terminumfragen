@@ -1,0 +1,317 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.loading {
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+}
+
+.notFound {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.notFound span {
+  font-size: 2rem;
+  color: var(--rosewood-light);
+}
+
+.notFound h2 {
+  font-size: 1.6rem;
+  color: var(--rosewood);
+}
+
+.notFound p {
+  color: var(--text-muted);
+}
+
+.successCard {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+  max-width: 480px;
+  width: 100%;
+}
+
+.successIcon {
+  font-size: 2rem;
+  color: var(--rosewood-light);
+}
+
+.successCard h1, .successCard h2 {
+  color: var(--rosewood);
+  font-size: 1.8rem;
+}
+
+.successCard p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.linkBox {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+}
+
+.linkText {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+.copyBtn {
+  background: var(--rosewood);
+  color: var(--cream);
+  border: none;
+  border-radius: 50px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.copyBtn:hover {
+  background: var(--rosewood-dark);
+}
+
+.hint {
+  font-size: 0.8rem !important;
+  font-style: italic;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.previewTitle {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Formular */
+.formular {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.umfrageHeader {
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.umfrageTitel {
+  font-size: 2.2rem;
+  color: var(--rosewood);
+  font-weight: 300;
+  margin-bottom: 0.4rem;
+}
+
+.umfrageOrt {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.umfrageBeschreibung {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--rosewood-light);
+}
+
+.cardHeader h2 {
+  font-size: 1.2rem;
+  color: var(--rosewood-dark);
+  font-weight: 500;
+}
+
+.hinweis {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  font-family: var(--font-display);
+}
+
+.termine {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.terminCard {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1rem;
+  text-align: left;
+  position: relative;
+  transition: all 0.2s;
+  cursor: pointer;
+  width: 100%;
+}
+
+.terminCard:hover:not(:disabled) {
+  border-color: var(--rosewood-light);
+  background: var(--cream-dark);
+}
+
+.terminCard.selected {
+  border-color: var(--rosewood);
+  background: #f0e6e4;
+}
+
+.terminDatum {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--rosewood-dark);
+  font-weight: 500;
+}
+
+.terminUhrzeit {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.terminAnmerkung {
+  font-size: 0.8rem;
+  color: var(--rosewood-light);
+  font-style: italic;
+  margin-top: 0.2rem;
+}
+
+.terminCheck {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--rosewood);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.field label {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.field input,
+.field textarea {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--cream);
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--rosewood-light);
+  background: var(--white);
+}
+
+.field textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.error {
+  color: #c0392b;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0.5rem;
+  background: #fdf0ee;
+  border-radius: var(--radius-sm);
+  border: 1px solid #f5c6c2;
+}
+
+.submitBtn {
+  background: var(--rosewood);
+  color: var(--cream);
+  border: none;
+  border-radius: 50px;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  letter-spacing: 0.03em;
+  width: 100%;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--rosewood-dark);
+  transform: translateY(-1px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
