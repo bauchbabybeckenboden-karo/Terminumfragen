@@ -1,7 +1,6 @@
 const { Resend } = require('resend')
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const NOTIFY_EMAIL = process.env.VITE_NOTIFY_EMAIL || 'bauch.baby.becken@icloud.com'
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -20,8 +19,8 @@ exports.handler = async (event) => {
       .join('')
 
     await resend.emails.send({
-      from: 'Terminumfrage <onboarding@resend.dev>',
-      to: NOTIFY_EMAIL,
+      from: 'Terminumfrage <bauch.baby.beckenboden@gmail.com>',
+      to: 'bauch.baby.beckenboden@gmail.com',
       subject: `Neue Antwort: ${umfrage_titel}`,
       html: `
         <div style="font-family: Georgia, serif; max-width: 480px; color: #3a2a28;">
