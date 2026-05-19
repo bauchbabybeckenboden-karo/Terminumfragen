@@ -19,8 +19,8 @@ exports.handler = async (event) => {
       .join('')
 
     await resend.emails.send({
-      from: 'Terminumfrage <bauch.baby.beckenboden@gmail.com>',
-      to: 'bauch.baby.beckenboden@gmail.com',
+      from: 'Terminumfrage <kontakt@bauch-baby-beckenboden.com>',
+      to: 'kontakt@bauch-baby-beckenboden.com',
       subject: `Neue Antwort: ${umfrage_titel}`,
       html: `
         <div style="font-family: Georgia, serif; max-width: 480px; color: #3a2a28;">
