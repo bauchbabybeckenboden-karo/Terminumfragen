@@ -29,3 +29,4 @@ create policy "Alle können Umfragen löschen" on umfragen for delete using (tru
 
 create policy "Alle können Antworten lesen" on antworten for select using (true);
 create policy "Alle können Antworten erstellen" on antworten for insert with check (true);
+create policy "Alle können Antworten löschen" on antworten for delete using (true);
