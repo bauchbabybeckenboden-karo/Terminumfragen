@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase.js'
 import styles from './MeineUmfragen.module.css'
 
@@ -10,6 +10,7 @@ function formatDatum(datum) {
 }
 
 export default function MeineUmfragen() {
+  const navigate = useNavigate()
   const [umfragen, setUmfragen] = useState([])
   const [loading, setLoading] = useState(true)
   const [antworten, setAntworten] = useState({})
@@ -49,6 +50,30 @@ export default function MeineUmfragen() {
     navigator.clipboard.writeText(`${window.location.origin}/umfrage/${id}`)
     setShareMsg(id)
     setTimeout(() => setShareMsg(''), 2000)
+  }
+
+  const editUmfrage = (id) => {
+    navigate(`/umfrage/${id}/bearbeiten`)
+  }
+
+  const duplicateUmfrage = async (umfrage) => {
+    const { data, error } = await supabase
+      .from('umfragen')
+      .insert([{
+        titel: `${umfrage.titel} (Kopie)`,
+        ort: umfrage.ort,
+        beschreibung: umfrage.beschreibung,
+        termine: umfrage.termine
+      }])
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Fehler beim Duplizieren:', error)
+      return
+    }
+
+    setUmfragen(prev => [data, ...prev])
   }
 
   const deleteUmfrage = async (id) => {
@@ -98,6 +123,20 @@ export default function MeineUmfragen() {
                   title="Link kopieren"
                 >
                   {shareMsg === u.id ? '✓' : '🔗'}
+                </button>
+                <button
+                  className={styles.actionBtn}
+                  onClick={() => editUmfrage(u.id)}
+                  title="Bearbeiten"
+                >
+                  ✎
+                </button>
+                <button
+                  className={styles.actionBtn}
+                  onClick={() => duplicateUmfrage(u)}
+                  title="Duplizieren"
+                >
+                  ⧉
                 </button>
                 <button
                   className={`${styles.actionBtn} ${styles.deleteBtn}`}
