@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../supabase.js'
 import styles from './UmfrageErstellen.module.css'
 
@@ -7,12 +7,42 @@ const emptyTermin = () => ({ datum: '', uhrzeit: '', anmerkung: '' })
 
 export default function UmfrageErstellen() {
   const navigate = useNavigate()
+  const { id } = useParams()
+  const isEditMode = !!id
   const [titel, setTitel] = useState('')
   const [ort, setOrt] = useState('')
   const [beschreibung, setBeschreibung] = useState('')
   const [termine, setTermine] = useState([emptyTermin()])
   const [loading, setLoading] = useState(false)
+  const [loadingUmfrage, setLoadingUmfrage] = useState(isEditMode)
   const [error, setError] = useState('')
+
+  // Load existing survey for edit mode
+  useEffect(() => {
+    if (!isEditMode) return
+
+    const loadUmfrage = async () => {
+      const { data, error: dbError } = await supabase
+        .from('umfragen')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+      if (dbError || !data) {
+        setError('Umfrage nicht gefunden.')
+        setLoadingUmfrage(false)
+        return
+      }
+
+      setTitel(data.titel || '')
+      setOrt(data.ort || '')
+      setBeschreibung(data.beschreibung || '')
+      setTermine(Array.isArray(data.termine) && data.termine.length > 0 ? data.termine : [emptyTermin()])
+      setLoadingUmfrage(false)
+    }
+
+    loadUmfrage()
+  }, [id, isEditMode])
 
   const addTermin = () => setTermine([...termine, emptyTermin()])
 
@@ -33,26 +63,51 @@ export default function UmfrageErstellen() {
     setLoading(true)
     setError('')
 
-    const { data, error: dbError } = await supabase
-      .from('umfragen')
-      .insert([{ titel, ort, beschreibung, termine: validTermine }])
-      .select()
-      .single()
+    if (isEditMode) {
+      // Update existing survey
+      const { error: dbError } = await supabase
+        .from('umfragen')
+        .update({ titel, ort, beschreibung, termine: validTermine })
+        .eq('id', id)
 
-    if (dbError) {
-      setError('Fehler beim Speichern. Bitte versuche es erneut.')
-      setLoading(false)
-      return
+      if (dbError) {
+        setError('Fehler beim Speichern. Bitte versuche es erneut.')
+        setLoading(false)
+        return
+      }
+
+      navigate('/meine-umfragen')
+    } else {
+      // Create new survey
+      const { data, error: dbError } = await supabase
+        .from('umfragen')
+        .insert([{ titel, ort, beschreibung, termine: validTermine }])
+        .select()
+        .single()
+
+      if (dbError) {
+        setError('Fehler beim Speichern. Bitte versuche es erneut.')
+        setLoading(false)
+        return
+      }
+
+      navigate(`/umfrage/${data.id}?neu=1`)
     }
+  }
 
-    navigate(`/umfrage/${data.id}?neu=1`)
+  if (loadingUmfrage) {
+    return (
+      <div className={styles.container}>
+        <p className={styles.loading}>Wird geladen …</p>
+      </div>
+    )
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.pageHeader}>
-        <h1>Neue Terminumfrage</h1>
-        <p>Erstelle eine Umfrage und teile den Link mit deinen Teilnehmerinnen.</p>
+        <h1>{isEditMode ? 'Umfrage bearbeiten' : 'Neue Terminumfrage'}</h1>
+        <p>{isEditMode ? 'Aktualisiere deine Umfrage.' : 'Erstelle eine Umfrage und teile den Link mit deinen Teilnehmerinnen.'}</p>
       </div>
 
       <div className={styles.card}>
@@ -141,7 +196,7 @@ export default function UmfrageErstellen() {
       {error && <p className={styles.error}>{error}</p>}
 
       <button className={styles.submitBtn} onClick={handleSubmit} disabled={loading}>
-        {loading ? 'Wird erstellt …' : 'Umfrage erstellen →'}
+        {loading ? (isEditMode ? 'Wird gespeichert …' : 'Wird erstellt …') : (isEditMode ? 'Änderungen speichern →' : 'Umfrage erstellen →')}
       </button>
     </div>
   )
