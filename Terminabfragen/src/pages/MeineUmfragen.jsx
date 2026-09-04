@@ -32,12 +32,17 @@ export default function MeineUmfragen() {
     if (offen === id) { setOffen(null); return }
     setOffen(id)
     if (antworten[id]) return
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('antworten')
       .select('*')
       .eq('umfrage_id', id)
       .order('created_at', { ascending: false })
-    setAntworten(prev => ({ ...prev, [id]: data || [] }))
+    if (error) {
+      console.error('Fehler beim Laden der Antworten:', error)
+      setAntworten(prev => ({ ...prev, [id]: [] }))
+    } else {
+      setAntworten(prev => ({ ...prev, [id]: data || [] }))
+    }
   }
 
   const copyLink = (id) => {
@@ -123,7 +128,7 @@ export default function MeineUmfragen() {
                           <span>{a.email}</span>
                         </div>
                         <div className={styles.antwortTermine}>
-                          {a.termine.map((t, j) => (
+                          {Array.isArray(a.termine) && a.termine.map((t, j) => (
                             <span key={j} className={styles.terminTag}>
                               {formatDatum(t.datum)} · {t.uhrzeit} Uhr
                             </span>
