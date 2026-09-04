@@ -11,6 +11,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/erstellen" element={<UmfrageErstellen />} />
+        <Route path="/umfrage/:id/bearbeiten" element={<UmfrageErstellen />} />
         <Route path="/umfrage/:id" element={<UmfrageTeilnehmen />} />
         <Route path="/meine-umfragen" element={<MeineUmfragen />} />
       </Routes>
