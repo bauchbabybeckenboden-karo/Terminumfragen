@@ -70,6 +70,7 @@ export default function MeineUmfragen() {
 
     if (error) {
       console.error('Fehler beim Duplizieren:', error)
+      alert('Fehler beim Duplizieren. Bitte versuche es erneut.')
       return
     }
 
@@ -78,8 +79,21 @@ export default function MeineUmfragen() {
 
   const deleteUmfrage = async (id) => {
     if (!confirm('Umfrage wirklich löschen? Alle Antworten werden ebenfalls gelöscht.')) return
-    await supabase.from('antworten').delete().eq('umfrage_id', id)
-    await supabase.from('umfragen').delete().eq('id', id)
+
+    const { error: answersError } = await supabase.from('antworten').delete().eq('umfrage_id', id)
+    if (answersError) {
+      console.error('Fehler beim Löschen der Antworten:', answersError)
+      alert('Fehler beim Löschen. Bitte versuche es erneut.')
+      return
+    }
+
+    const { error: surveyError } = await supabase.from('umfragen').delete().eq('id', id)
+    if (surveyError) {
+      console.error('Fehler beim Löschen der Umfrage:', surveyError)
+      alert('Fehler beim Löschen. Bitte versuche es erneut.')
+      return
+    }
+
     setUmfragen(prev => prev.filter(u => u.id !== id))
   }
 
