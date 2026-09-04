@@ -76,6 +76,7 @@ export default function UmfrageErstellen() {
         return
       }
 
+      setLoading(false)
       navigate('/meine-umfragen')
     } else {
       // Create new survey
@@ -91,6 +92,7 @@ export default function UmfrageErstellen() {
         return
       }
 
+      setLoading(false)
       navigate(`/umfrage/${data.id}?neu=1`)
     }
   }
