@@ -23,13 +23,13 @@ exports.handler = async (event) => {
       to: 'kontakt@bauch-baby-beckenboden.com',
       subject: `Neue Antwort: ${umfrage_titel}`,
       html: `
-        <div style="font-family: Georgia, serif; max-width: 480px; color: #3a2a28;">
-          <h2 style="color: #7d534e; font-weight: 400;">Neue Teilnahme ♡</h2>
+        <div style="font-family: Georgia, serif; max-width: 480px; color: #3D2B2B;">
+          <h2 style="color: #8B6464; font-weight: 400;">Neue Teilnahme ♡</h2>
           <p><strong>Umfrage:</strong> ${umfrage_titel}</p>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>E-Mail:</strong> ${email}</p>
           <p><strong>Zugesagte Termine:</strong></p>
-          <ul style="padding-left: 1.2rem; color: #5c3b37;">${termineHTML}</ul>
+          <ul style="padding-left: 1.2rem; color: #3D2B2B;">${termineHTML}</ul>
           ${anmerkung ? `<p><strong>Anmerkung:</strong> <em>${anmerkung}</em></p>` : ''}
         </div>
       `
