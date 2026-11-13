@@ -122,14 +122,8 @@ export default function UmfrageTeilnehmen() {
       await fetch('/.netlify/functions/notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          email,
-          umfrage_titel: umfrage.titel,
-          termine: gewählteTermine,
-          anmerkung: keinTermin ? 'Kein Termin passend' : anmerkung,
-          kein_termin: keinTermin
-        })
+        // Nur die Umfrage-ID - die Funktion liest die Antwort selbst aus der Datenbank
+        body: JSON.stringify({ umfrage_id: id })
       })
     } catch (e) {
       console.warn('Notify Fehler:', e)
