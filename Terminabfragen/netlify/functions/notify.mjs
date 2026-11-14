@@ -46,9 +46,12 @@ function mailHtml(umfrage, a) {
     : "<em>kein Termin passend</em>";
   return `<table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" style="padding:16px 8px;">
 <table width="520" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;width:100%;font-family:Arial,Helvetica,sans-serif;">
-<tr><td bgcolor="#8B6464" style="background-color:#8B6464;padding:20px 28px;color:#F3E9E5;">
-<p style="margin:0 0 4px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#F3E9E5;">Terminumfrage</p>
-<p style="margin:0;font-family:Georgia,serif;font-size:22px;color:#F3E9E5;">Neue Teilnahme &#9825;</p>
+<tr><td bgcolor="#8B6464" style="background-color:#8B6464;padding:22px 28px;color:#F3E9E5;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+<td valign="middle" style="padding:0 16px 0 0;"><img src="https://raw.githubusercontent.com/bauchbabybeckenboden-karo/Logos/main/Clitlogo-creme.png" width="36" height="72" alt="" style="display:block;width:36px;height:72px;border:0;"/></td>
+<td valign="middle"><p style="margin:0 0 4px;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#F3E9E5;">Terminumfrage</p>
+<p style="margin:0;font-family:Georgia,serif;font-size:22px;color:#F3E9E5;">Neue Teilnahme &#9825;</p></td>
+</tr></table>
 </td></tr>
 <tr><td bgcolor="#F3E9E5" style="background-color:#F3E9E5;padding:24px 28px;color:#3D2B2B;font-size:14px;line-height:1.7;">
 <p style="margin:0 0 10px;"><strong>Umfrage:</strong> ${escapeHtml(umfrage?.titel || "")}</p>
@@ -57,6 +60,11 @@ function mailHtml(umfrage, a) {
 <p style="margin:0 0 6px;"><strong>Termine:</strong></p>
 ${termine}
 ${a.anmerkung ? `<p style="margin:12px 0 0;"><strong>Anmerkung:</strong> <em>${escapeHtml(a.anmerkung)}</em></p>` : ""}
+</td></tr>
+<tr><td bgcolor="#8B6464" align="center" style="background:#8B6464;padding:24px 28px;font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:21px;color:#F3E9E5;text-align:center;">
+<div style="font-family:Georgia,serif;font-size:20px;letter-spacing:1px;color:#F3E9E5;">Wunderwerk Frau</div>
+<div style="width:140px;height:1px;background:#F3E9E5;margin:6px auto;line-height:1px;font-size:1px;">&nbsp;</div>
+<div style="font-size:11px;letter-spacing:3px;color:#F3E9E5;">BAUCH &middot; BABY &middot; BECKENBODEN</div>
 </td></tr></table></td></tr></table>`;
 }
 

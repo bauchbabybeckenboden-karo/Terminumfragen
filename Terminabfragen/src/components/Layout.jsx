@@ -8,9 +8,17 @@ export default function Layout({ children }) {
     <div className={styles.wrapper}>
       <header className={styles.header}>
         <Link to="/" className={styles.logo}>
-          <span className={styles.logoHeart}>♡</span>
-          <span className={styles.logoText}>Bauch · Baby · Beckenboden</span>
-          <span className={styles.logoHeart}>♡</span>
+          <img
+            className={styles.logoImg}
+            src="https://raw.githubusercontent.com/bauchbabybeckenboden-karo/Logos/main/Clitlogo-creme.png"
+            alt="Wunderwerk Frau Logo"
+          />
+          <span className={styles.logoBlock}>
+            <span className={styles.logoName}>Wunderwerk Frau</span>
+            <span className={styles.logoLine}></span>
+            <span className={styles.logoSub}>Bauch · Baby · Beckenboden</span>
+            <span className={styles.logoTag}>Trageberatungen sowie Sport-, Beckenboden- &amp; somatische Yogakurse für Frauen</span>
+          </span>
         </Link>
         <nav className={styles.nav}>
           <Link
@@ -29,7 +37,7 @@ export default function Layout({ children }) {
       </header>
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
-        <p>♡ Bauch · Baby · Beckenboden</p>
+        <p>Wunderwerk Frau · Bauch · Baby · Beckenboden</p>
       </footer>
     </div>
   )

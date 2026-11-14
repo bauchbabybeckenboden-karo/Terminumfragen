@@ -5,36 +5,69 @@
 }
 
 .header {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem;
-  height: 60px;
+  background: #8B6464;
+  padding: 1.1rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 1px 8px rgba(125,83,78,0.07);
+  box-shadow: 0 1px 8px rgba(125,83,78,0.15);
 }
 
 .logo {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  color: var(--rosewood);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  letter-spacing: 0.02em;
+  gap: 1rem;
+  color: #F3E9E5;
 }
 
-.logoHeart {
-  font-size: 0.85rem;
-  opacity: 0.7;
+.logoImg {
+  height: 64px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
 }
 
-.logoText {
-  font-weight: 500;
+.logoBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.logoName {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: #F3E9E5;
+}
+
+.logoLine {
+  display: block;
+  height: 1px;
+  background: #F3E9E5;
+  margin: 6px 0;
+  max-width: 260px;
+}
+
+.logoSub {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #F3E9E5;
+}
+
+.logoTag {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.3;
+  color: #F3E9E5;
+  margin-top: 4px;
 }
 
 .nav {
@@ -44,30 +77,32 @@
 }
 
 .navBtn {
-  background: var(--rosewood);
-  color: var(--cream);
+  background: #F3E9E5;
+  color: #8B6464;
   padding: 0.45rem 1.1rem;
   border-radius: 50px;
   font-size: 0.85rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.02em;
   transition: background 0.2s;
 }
 
 .navBtn:hover, .navBtn.active {
-  background: var(--rosewood-dark);
+  background: #FFFFFF;
+  color: #3D2B2B;
 }
 
 .navLink {
-  color: var(--text-muted);
+  color: #F3E9E5;
   font-size: 0.85rem;
   font-weight: 400;
   letter-spacing: 0.02em;
-  transition: color 0.2s;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .navLink:hover, .navLink.active {
-  color: var(--rosewood);
+  color: #FFFFFF;
 }
 
 .main {
@@ -90,10 +125,16 @@
 
 @media (max-width: 500px) {
   .header {
-    padding: 0 1rem;
+    padding: 1rem;
+    justify-content: center;
+    position: static;
   }
-  .logoText {
-    font-size: 0.95rem;
+  .logo {
+    flex-direction: column;
+    text-align: center;
+  }
+  .logoLine {
+    margin: 6px auto;
   }
   .main {
     padding: 1.5rem 1rem;

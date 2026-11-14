@@ -28,7 +28,7 @@
 
 .empty span {
   font-size: 2rem;
-  color: var(--rosewood-light);
+  color: var(--rosewood);
 }
 
 .empty h2 {
@@ -116,7 +116,7 @@
 
 .meta {
   font-size: 0.8rem;
-  color: var(--rosewood-light);
+  color: var(--rosewood);
 }
 
 .cardActions {
